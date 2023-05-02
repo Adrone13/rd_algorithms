@@ -2,8 +2,10 @@ class Stack {
   #stack = [];
 
   constructor(array) {
-    for (let i = array.length - 1; i >= 0; i--) {
-      this.#stack.push(array[i]);
+    if (Array.isArray(array)) {
+      for (let i = array.length - 1; i >= 0; i--) {
+        this.#stack.push(array[i]);
+      }
     }
   }
 
@@ -29,6 +31,10 @@ class Stack {
 
   size() {
     return this.#stack.length;
+  }
+
+  isEmpty() {
+    return this.#stack.length === 0;
   }
 }
 

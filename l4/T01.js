@@ -1,4 +1,5 @@
 const { Stack, DoublyLinkedList } = require('../structures');
+const { test } = require('../utils/test');
 
 // Complexity O(2n^2) = O(n^2)
 // Extra space O(1)
@@ -30,34 +31,34 @@ function countStarvingStudentsRaw(students, sandwiches) {
   let studentsCaret = 0;
   let sandwichesCaret = 0;
 
-  while (starving !== studentsLeft && sandwichesCaret < sandwiches.length - 1) {
-    if (studentsCaret === students.length) {
-      studentsCaret = 0;
-
-      continue;
-    }
-
+  while (starving !== studentsLeft && sandwichesCaret < sandwiches.length) {
     if (students[studentsCaret] === null) {
       studentsCaret++;
 
+      // console.log('skip null')
+
       continue;
     }
 
-    console.log('students', students, 'sandwiches', sandwiches);
-    console.log(`student(${studentsCaret}) ${students[studentsCaret]} === sandwich(${sandwichesCaret}) ${sandwiches[sandwichesCaret]} ${students[studentsCaret] === sandwiches[sandwichesCaret]}`);
+    // console.log(`student(${studentsCaret}) ${students[studentsCaret]} === sandwich(${sandwichesCaret}) ${sandwiches[sandwichesCaret]} ${students[studentsCaret] === sandwiches[sandwichesCaret]}`);
 
     if (students[studentsCaret] === sandwiches[sandwichesCaret]) {
       students[studentsCaret] = null; // mark student that left
-      sandwiches[sandwichesCaret] = null; // mark taken sandwich
+      sandwiches[sandwichesCaret] = null; // mark taken sandwich. not essential for logic, but good for logging
 
       studentsLeft--; // update amount of students left
-      studentsCaret++; // move to next student
       sandwichesCaret++; // move to next sandwich when take
+      starving = 0; // reset starving after student left
+    } else {
+      starving++;
+    }
 
-      starving = 0;
+    // console.log('students', students, 'sandwiches', sandwiches);
+
+    if (studentsCaret === students.length - 1) {
+      studentsCaret = 0;
     } else {
       studentsCaret++;
-      starving++;
     }
   }
 
@@ -132,16 +133,15 @@ function countStarvingStudentsLinkedList(students, sandwiches) {
   return starvingCount;
 }
 
-
-
-const testData = [
-  [[1, 1, 0, 0], [0, 1, 0, 1]], // 0
-  [[1, 1, 1, 0, 0, 1], [1, 0, 0, 0, 1, 1]], // 3
-  [[1, 1, 1, 0, 0], [1, 1, 1, 1, 1]], // 2
-  [[1, 1, 1, 1, 1], [1, 1, 1, 1, 1]], // 0
-  [[1, 1, 1, 1, 1], [0, 0, 0, 0, 0]], // 5
-  [[0, 0, 0, 0, 0], [1, 1, 1, 1, 1]], // 5
-  [[1, 1, 1, 0, 0, 1], [1, 0, 0, 0, 1, 1]], // 3
+const testCases = [
+  { input: [[0, 1, 1, 0], [0, 0, 1, 0]], expected: 1 },
+  { input: [[1, 1, 0, 1], [0, 1, 1, 1]], expected: 0 },
+  { input: [[1, 1, 1, 0, 0, 1], [1, 0, 0, 0, 1, 1]], expected: 3 },
+  { input: [[1, 1, 1, 0, 0], [1, 1, 1, 1, 1]], expected: 2 },
+  { input: [[1, 1, 1, 1, 1], [1, 1, 1, 1, 1]], expected: 0 },
+  { input: [[1, 1, 1, 1, 1], [0, 0, 0, 0, 0]], expected: 5 },
+  { input: [[0, 0, 0, 0, 0], [1, 1, 1, 1, 1]], expected: 5 },
+  { input: [[1, 1, 1, 0, 0, 1], [1, 0, 0, 0, 1, 1]], expected: 3 }
 ];
 
-console.log(countStarvingStudentsWithExtendingArray(...testData[0]));
+test(countStarvingStudentsLinkedList, testCases);
