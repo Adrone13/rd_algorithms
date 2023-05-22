@@ -58,13 +58,17 @@ function findGoodNodes(node, biggestInPath = 0, result = 0) {
 }
 
 const testCases = [
+  //             (5)
+  //       1              (4)
+  //   3               1       (5)
+  { input: [arrayToTree([5, 1, 4, 3, null, 1, 5])], expected: 2 },
   //             (3)
   //       1              (4)
   //  (3)              1       (5)
   { input: [arrayToTree([3, 1, 4, 3, null, 1, 5])], expected: 4 },
-  //       1
-  //   2       3
-  // 4   5   6   7
+  //       (1)
+  //    (2)     (3)
+  // (4)  (5) (6)  (7)
   { input: [arrayToTree([1, 2, 3, 4, 5, 6, 7])], expected: 7 },
   //      (7)
   //   6       5

@@ -26,4 +26,118 @@
  * Приклад output:
  * [[32, 54], [2, 4, 5]]
  */
-  
+
+const { BinarySearchTree, AVLTree, BinaryHeap } = require('../structures');
+
+function processRequests(k, requests) {
+  const responses = [];
+  const trips = new BinarySearchTree();
+
+  for (let i = 0; i < requests.length; i++) {
+    const request = requests[i];
+    const [requestType, requestParam] = request;
+
+    if (requestType === 1) {
+      trips.add(requestParam);
+
+      trips.traverseInOrder();
+    } else {
+      const response = [];
+
+      for (let j = 0; j < k; j++) {
+        const val = trips.findSmallestValue();
+        if (!val) {
+          break;
+        }
+        trips.delete(val);
+        response.push(val);
+      }
+
+      responses.push(response);
+    }
+  }
+
+  return responses;
+}
+
+function processRequestsAVL(k, requests) {
+  const responses = [];
+  const trips = new AVLTree();
+
+  for (let i = 0; i < requests.length; i++) {
+    const request = requests[i];
+    const [requestType, requestParam] = request;
+
+    if (requestType === 1) {
+      trips.insert(requestParam);
+
+      trips.printTree();
+    } else {
+      const response = [];
+
+      for (let j = 0; j < k; j++) {
+        const val = trips.findSmallestValue();
+        console.log('Shortest trip', val);
+
+        if (!val) {
+          break;
+        }
+        trips.delete(val);
+        response.push(val);
+      }
+
+      responses.push(response);
+    }
+  }
+
+  return responses;
+}
+
+function processRequestsBinaryHeap(k, requests) {
+  const responses = [];
+  const trips = new BinaryHeap();
+
+  for (let i = 0; i < requests.length; i++) {
+    const request = requests[i];
+    const [requestType, requestParam] = request;
+
+    if (requestType === 1) {
+      trips.add(requestParam);
+
+      trips.print();
+    } else {
+      const response = [];
+
+      for (let j = 0; j < k; j++) {
+        const val = trips.remove();
+
+        trips.print();
+
+        if (!val) {
+          break;
+        }
+
+        response.push(val);
+      }
+
+      responses.push(response);
+    }
+  }
+
+  return responses;
+}
+
+const testCases = [
+  {
+    input: [3, [[1, 54], [1, 32], [2], [1, 85], [1, 4], [1, 5], [1, 22], [1, 2], [2]]],
+    expected: [[32, 54], [2, 4, 5]]
+  },
+  {
+    input: [2, [[2], [1, 54], [1, 32], [1, 85], [1, 4], [2], [1, 5], [2]]],
+    expected: [[], [4, 32], [5, 54]]
+  },
+];
+
+const { test } = require('../utils/test');
+
+test(processRequestsBinaryHeap, testCases);

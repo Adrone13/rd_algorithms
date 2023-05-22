@@ -1,3 +1,5 @@
+const { isEqual } = require('lodash');
+
 function test(fn, testCases) {
   testCases.forEach((testCase, index) => {
     const { input, expected } = testCase;
@@ -6,14 +8,14 @@ function test(fn, testCases) {
 
     const actual = fn(...input);
 
-    process.stdout.write(`Expected: ${expected}, Received: ${actual} `);
+    console.log('Expected:', expected, 'Received:', actual);
 
-    if (actual !== expected) {
-      process.stdout.write(`❌ Test ${index} failed`);
+    if (!isEqual(actual, expected)) {
+      console.log(`❌ Test ${index} failed`);
     } else {
-      process.stdout.write(`✅ Test ${index} successful`);
+      console.log(`✅ Test ${index} successful`);
     }
-    process.stdout.write('\n');
+    console.log('\n');
   });
 }
 
