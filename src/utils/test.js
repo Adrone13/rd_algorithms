@@ -11,7 +11,7 @@ function test(fn, testCases) {
     console.log('Expected:', expected, 'Received:', actual);
 
     if (!isEqual(actual, expected)) {
-      console.log(`❌ Test ${index} failed`);
+      throw new Error(`❌ Test ${index} failed`);
     } else {
       console.log(`✅ Test ${index} successful`);
     }
