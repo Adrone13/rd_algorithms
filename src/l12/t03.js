@@ -131,7 +131,7 @@ function testStringSingleMap(pattern, str) {
 
   if (pattern.length !== words.length) {
     return false;
-  } 
+  }
 
   for (let i = 0; i < words.length; i++) {
     const patternPosition = positions.get(`p_${pattern[i]}`);

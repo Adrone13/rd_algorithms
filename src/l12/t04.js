@@ -12,6 +12,8 @@
  * і можуть бути використані
  */
 
+const { test } = require("../utils/test");
+
 const testCases = [
   { input: ["aa", "aab"], expected: true },
   { input: ["aa", "ab"], expected: false },
@@ -26,3 +28,45 @@ const testCases = [
   { input: ["qwertyuiop", "poiqwerytuueq"], expected: true },
   { input: ["poiqwerytuueq", "qwertyuiop"], expected: false },
 ];
+
+function isMurderNotePossible(ransomNote, magazine) {
+  const dict = new Map();
+  for (let char of magazine) {
+    const count = dict.get(char) ?? 0;
+    
+    dict.set(char, count + 1);
+  }
+
+  // console.log(dict);
+
+  for (let char of ransomNote) {
+    // if (char === ' ') {
+    //   continue;
+    // }
+
+    const charCount = dict.get(char);
+
+    if (!charCount) {
+      // console.log('FAILED ON CHAR:', char);
+      // console.log('DICT:', dict);
+
+      return false;
+    }
+
+    if (charCount > 1) {
+      dict.set(char, charCount - 1);
+    } else {
+      dict.delete(char);
+    }
+  }
+
+  // console.log(dict);
+
+  return true;
+}
+
+test(isMurderNotePossible, testCases);
+
+// const { input, expected } = testCases[7];
+
+// console.log('Expected:', expected, 'Received:', isMurderNotePossible(...input));
