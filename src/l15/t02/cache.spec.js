@@ -1,48 +1,8 @@
 const { strict: assert } = require('node:assert');
 
+const { test, testCase } = require('../test');
+
 const { Cache } = require('./cache');
-
-let testCasesCount = 0;
-let successfulTestCasesCount = 0;
-
-function testCase(name, fn) {
-  testCasesCount++;
-
-  console.log('Running:', name);
-  try {
-    fn();
-
-    console.log(`✅ Test passed`);
-    successfulTestCasesCount++;
-  } catch (error) {
-    console.log(`❌ Test failed`, error.message);
-  }
-
-  console.log();
-}
-
-function test(name, fn) {
-  console.log(name);
-
-  fn();
-
-  if (testCasesCount === successfulTestCasesCount) {
-    console.log(`✅ Passed ${successfulTestCasesCount}/${testCasesCount}`);
-  } else {
-    console.log(`❌ Passed ${successfulTestCasesCount}/${testCasesCount}`);
-  }
-}
-/**
- * Test cases:
- * Capacity should be 4 if constructor argument is omitted
- * Should not exceed defined capacity regardless of number of put items
- * Should return existing item by key
- * Should replace existing value on put if key already exists
- * Should return -1 if key does not exist
- * Should return -1 for oldest item in cache after adding key if capacity limit is reached
- * Should handle defined limit for key (-10^4 <= key <= 10^4) and value (-10^9 <= value <= 10^9)
- */
-
 
 test('LRU Cache', () => {
   testCase('Capacity should be 4 if constructor argument is omitted', () => {
@@ -75,16 +35,16 @@ test('LRU Cache', () => {
   });
 
   testCase('Should replace existing value on put if key already exists', () => {
-    const cache = new Cache(5);
+    const cache = new Cache(3);
+    
+    cache.put(1, 1);
+    cache.put(2, 2);
+    cache.put(3, 3);
 
-    for (let i = 0; i < 4; i++) {
-      cache.put(i, i * 10);
-    }
+    cache.put(1, 4);
 
-    cache.put(3, 42);
-
-    assert.equal(42, cache.get(3));
-    assert.equal(4, cache.size());
+    assert.equal(4, cache.get(1));
+    assert.equal(3, cache.size());
   });
 
   testCase('Should return -1 if key does not exist', () => {
